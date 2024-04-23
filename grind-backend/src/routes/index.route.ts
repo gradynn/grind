@@ -5,7 +5,7 @@ import success from '../middleware/success.middleware';
 const indexRouter = Router();
 
 indexRouter.get('/', (req: Request, res: Response, next: NextFunction) => {
-    res.locals.message = 'Grind Backend Server is up and running!';
+    res.locals.message = 'Grind API is running...';
 
     next();
 }, success);

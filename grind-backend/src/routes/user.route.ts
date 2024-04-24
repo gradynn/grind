@@ -10,6 +10,18 @@ import userSignInSchema from "../validators/userSignInSchema";
 
 const userRouter = Router();
 
+/**
+ * POST /user/register
+ * @summary Register a new user
+ * @tags User
+ * @param {string} request.body.firstName - User first name
+ * @param {string} request.body.lastName - Optional user last name
+ * @param {string} request.body.email - User email
+ * @param {string} request.body.password - User password
+ * @return {object} 200 - User registered successfully
+ * @return {object} 409 - User with that email already exists
+ * @return {object} 500 - Internal server error
+ */
 userRouter.post('/register', schemaValidator(userRegistrationSchema), async (req: Request, res: Response, next: NextFunction) => {   
     const { firstName, lastName, email, password } = req.body;
     
@@ -37,12 +49,22 @@ const limiter = rateLimit({
     message: 'Too many requests, please try again after 15 minutes',
 })
 
+/**
+ * POST /user/login
+ * @summary Login a user
+ * @tags User
+ * @param {string} request.body.email - User email
+ * @param {string} request.body.password - User password
+ * @return {object} 200 - User logged in successfully
+ * @return {object} 404 - User not found
+ * @return {object} 401 - Invalid password
+ * @return {object} 500 - Internal server error
+ */
 userRouter.post('/login', limiter, schemaValidator(userSignInSchema), async (req: Request, res: Response, next: NextFunction) => {
     const { email, password } = req.body;
 
     try {
         const token = await loginUser(email, password);
-        console.log(token);
         res.locals.data = { token };
         next();
     } catch (error: any) {
@@ -61,6 +83,14 @@ userRouter.post('/login', limiter, schemaValidator(userSignInSchema), async (req
     }
 }, success);
 
+/**
+ * GET /user/profile
+ * @summary Get user profile data
+ * @tags User
+ * 
+ * @return {object} 200 - User profile data
+ * @return {object} 500 - Internal server error
+ */
 userRouter.get('/profile', authenticateToken, async (req: Request, res: Response, next: NextFunction) => {
     const { userId } = req.body;
 

@@ -5,6 +5,13 @@ interface CustomJwtPayload extends JwtPayload {
     userId: string;
 };
 
+/**
+ * @description Middleware to authenticate and unpack a user's JWT token
+ * @param req {object} - The request object
+ * @param res {object} - The response object
+ * @param next {function} - The next function
+ * @returns 
+ */
 const authenticateToken = (req: Request, res: Response, next: NextFunction) => {
     const authHeader = req.headers.authorization;
     const token = authHeader && authHeader.split(' ')[1];

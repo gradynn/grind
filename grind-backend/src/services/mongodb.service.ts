@@ -7,6 +7,14 @@ interface MongoError extends Error {
     code?: number;
 };
 
+/**
+ * @summary Register a new user in the database
+ * @param firstName {string} - User first name
+ * @param lastName {string} - Optional user last name
+ * @param email {string} - User email
+ * @param password {string} - User password
+ * @returns {object} - The newly created user
+ */
 export const registerUser = async (firstName: string, lastName: string, email: string, password: string) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -19,6 +27,12 @@ export const registerUser = async (firstName: string, lastName: string, email: s
     return newUser;
 };
 
+/**
+ * @summary Login a user if they exist in the database and the password is correct by returning a JWT token
+ * @param email {string} - User email
+ * @param password {string} - User password
+ * @returns {string} - JWT token
+ */
 export const loginUser = async (email: string, password: string): Promise<string> => {
     const user = await User.findOne({ email });
 
@@ -37,6 +51,11 @@ export const loginUser = async (email: string, password: string): Promise<string
     return token
 };
 
+/**
+ * @summary Get a user's profile data
+ * @param userId {string} - User ID
+ * @returns {object} - User profile data { firstName, lastName, email }
+ */
 export const getProfileData = async (userId: string) => {
     const user = await User.findById(userId);
 

@@ -1,4 +1,5 @@
-import { NextFunction, Request, Response, Router } from "express"; 
+import { NextFunction, Request, Response, Router } from "express";
+import rateLimit from "express-rate-limit";
 
 import success from "../middleware/success.middleware";
 import userRegistrationSchema from "../validators/userRegistrationSchema";
@@ -28,7 +29,14 @@ userRouter.post('/register', schemaValidator(userRegistrationSchema), async (req
     }
 }, success);
 
-userRouter.post('/login', async (req: Request, res: Response, next: NextFunction) => {
+// rate limit
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 5,
+    message: 'Too many requests, please try again after 15 minutes',
+})
+
+userRouter.post('/login', limiter, async (req: Request, res: Response, next: NextFunction) => {
     const { email, password } = req.body;
 
     try {

@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 import fs from 'fs';
 import https from 'https';
 import path from 'path';
+import rateLimit from 'express-rate-limit';
 
 import indexRouter from './routes/index.route';
 import userRouter from './routes/user.route';
@@ -21,6 +22,15 @@ mongoose.connect(process.env.MONGO_DB_URI || '').then(() => {
 }).catch((err) => {
     logger.error(`Error connecting to MongoDB: ${err}`);
 });
+
+// rate limit
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 100,
+    standardHeaders: true,
+    legacyHeaders: false,
+})
+app.use(limiter);
 
 // middleware
 app.use((req: Request, res: Response, next: NextFunction) => {

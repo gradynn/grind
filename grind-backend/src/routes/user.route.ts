@@ -6,6 +6,7 @@ import userRegistrationSchema from "../validators/userRegistrationSchema";
 import schemaValidator from "../middleware/schemaValidator.middleware";
 import { registerUser, loginUser, getProfileData } from "../services/mongodb.service";
 import authenticateToken from "../middleware/authenticateToken.middleware";
+import userSignInSchema from "../validators/userSignInSchema";
 
 const userRouter = Router();
 
@@ -36,7 +37,7 @@ const limiter = rateLimit({
     message: 'Too many requests, please try again after 15 minutes',
 })
 
-userRouter.post('/login', limiter, async (req: Request, res: Response, next: NextFunction) => {
+userRouter.post('/login', limiter, schemaValidator(userSignInSchema), async (req: Request, res: Response, next: NextFunction) => {
     const { email, password } = req.body;
 
     try {

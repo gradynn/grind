@@ -1,0 +1,11 @@
+{
+	"folders": [
+		{
+			"path": "grind-frontend"
+		},
+		{
+			"path": "grind-backend"
+		}
+	],
+	"settings": {}
+}

@@ -8,6 +8,7 @@
     "esModuleInterop": true,  // Enables compatibility with default import syntax in Babel
     "skipLibCheck": true,     // Skip type checking of all declaration files (*.d.ts)
     "forceConsistentCasingInFileNames": true,
+    "types": ["jest"],
   },
   "include": [
     "src/**/*.ts"             // Files to include

@@ -2,8 +2,9 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { useEffect } from "react";
 import './App.css';
 
-import Home from '@src/screens/home'
-import NotFound from '@src/screens/notFound'
+import Home from '@src/screens/home';
+import NotFound from '@src/screens/notFound';
+import Register from "./screens/register";
 
 interface Screen {
   name: string;
@@ -17,6 +18,11 @@ const screens: Screen[] = [
     path: '/home',
     component: <Home />
   },
+  {
+    name: 'Register',
+    path: '/register',
+    component: <Register />
+  }
 ]
 
 function App() {

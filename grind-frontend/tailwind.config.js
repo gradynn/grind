@@ -14,6 +14,7 @@ export default {
       'text-2': '#B3B3B3',
       'background': '#121212',
       'background-2': '#181818',
+      'input': '#2B2B2B',
     }
   },
   plugins: [],

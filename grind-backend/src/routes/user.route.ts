@@ -10,6 +10,12 @@ import userSignInSchema from "../validators/userSignInSchema";
 
 const userRouter = Router();
 
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 5,
+    message: 'Too many requests, please try again after 15 minutes',
+})
+
 /**
  * POST /user/register
  * @summary Register a new user
@@ -22,7 +28,7 @@ const userRouter = Router();
  * @return {object} 409 - User with that email already exists
  * @return {object} 500 - Internal server error
  */
-userRouter.post('/register', schemaValidator(userRegistrationSchema), async (req: Request, res: Response, next: NextFunction) => {   
+userRouter.post('/register', limiter, schemaValidator(userRegistrationSchema), async (req: Request, res: Response, next: NextFunction) => {   
     const { firstName, lastName, email, password } = req.body;
     
     try {
@@ -32,7 +38,7 @@ userRouter.post('/register', schemaValidator(userRegistrationSchema), async (req
     } catch (error: any) {
         if (error.code === 11000) {
             res.status(409).json({
-                message: 'User with that already exists',
+                message: 'User with that email already exists',
             });
         } else {
             res.status(500).json({
@@ -41,13 +47,6 @@ userRouter.post('/register', schemaValidator(userRegistrationSchema), async (req
         }
     }
 }, success);
-
-// rate limit
-const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000,
-    max: 5,
-    message: 'Too many requests, please try again after 15 minutes',
-})
 
 /**
  * POST /user/login

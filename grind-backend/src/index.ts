@@ -5,6 +5,7 @@ import fs from 'fs';
 import https from 'https';
 import path from 'path';
 import rateLimit from 'express-rate-limit';
+import cors from 'cors';
 
 import indexRouter from './routes/index.route';
 import userRouter from './routes/user.route';
@@ -39,6 +40,7 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 })
 app.use(express.json());
 app.use(logRequest);
+app.use(cors());
 
 app.use('/', indexRouter);
 app.use('/user', userRouter);

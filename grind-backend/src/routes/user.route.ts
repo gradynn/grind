@@ -4,9 +4,11 @@ import rateLimit from "express-rate-limit";
 import success from "../middleware/success.middleware";
 import userRegistrationSchema from "../validators/userRegistrationSchema";
 import schemaValidator from "../middleware/schemaValidator.middleware";
-import { registerUser, loginUser, getProfileData } from "../services/mongodb.service";
+import { registerUser, loginUser, getUserData } from "../services/mongodb.service";
 import authenticateToken from "../middleware/authenticateToken.middleware";
 import userSignInSchema from "../validators/userSignInSchema";
+import logger from "../utils/logger";
+import { profile } from "console";
 
 const userRouter = Router();
 
@@ -61,15 +63,15 @@ userRouter.post('/register', limiter, schemaValidator(userRegistrationSchema), a
  */
 userRouter.post('/login', limiter, schemaValidator(userSignInSchema), async (req: Request, res: Response, next: NextFunction) => {
     const { email, password } = req.body;
-
     try {
         const token = await loginUser(email, password);
         res.locals.data = { token };
         next();
     } catch (error: any) {
         if (error.message === 'User not found') {
-            res.status(404);
-            res.locals.message = 'User not found';
+            res.status(404).json({
+                message: 'User not found',
+            });
         } else if (error.message === 'Invalid password') {
             res.status(401).json({
                 message: 'Invalid password',
@@ -90,13 +92,12 @@ userRouter.post('/login', limiter, schemaValidator(userSignInSchema), async (req
  * @return {object} 200 - User profile data
  * @return {object} 500 - Internal server error
  */
-userRouter.get('/profile', authenticateToken, async (req: Request, res: Response, next: NextFunction) => {
+userRouter.get('/user-data', authenticateToken, async (req: Request, res: Response, next: NextFunction) => {
     const { userId } = req.body;
 
     try {
-        const profileData = await getProfileData(userId);
-        console.log(profileData);
-        res.locals.data = profileData;
+        const profileData = await getUserData(userId);
+        res.locals.data = { user: profileData };
         next();
     } catch (error: any) {
         res.status(500).json({

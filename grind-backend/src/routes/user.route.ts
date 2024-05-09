@@ -4,11 +4,9 @@ import rateLimit from "express-rate-limit";
 import success from "../middleware/success.middleware";
 import userRegistrationSchema from "../validators/userRegistrationSchema";
 import schemaValidator from "../middleware/schemaValidator.middleware";
-import { registerUser, loginUser, getUserData } from "../services/mongodb.service";
+import { registerUser, loginUser, getUserData, getUserTasks } from "../services/mongodb.service";
 import authenticateToken from "../middleware/authenticateToken.middleware";
 import userSignInSchema from "../validators/userSignInSchema";
-import logger from "../utils/logger";
-import { profile } from "console";
 
 const userRouter = Router();
 
@@ -97,7 +95,16 @@ userRouter.get('/user-data', authenticateToken, async (req: Request, res: Respon
 
     try {
         const profileData = await getUserData(userId);
-        res.locals.data = { user: profileData };
+        const tasks = await getUserTasks(userId);
+
+        const payload = {
+            firstName: profileData.firstName,
+            lastName: profileData.lastName,
+            email: profileData.email,
+            tasks: tasks,
+        };
+
+        res.locals.data = { user: payload };
         next();
     } catch (error: any) {
         res.status(500).json({

@@ -2,6 +2,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
 import User from "../models/User.model";
+import Task from '../models/Task.model';
 import logger from '../utils/logger';
 
 interface MongoError extends Error {
@@ -74,4 +75,30 @@ export const getUserData = async (userId: string) => {
         email: user.email,
         // Intentionally drop password
     };
+};
+
+export const createTask = async (userId: string, title: string): Promise<string> => {
+    const newTask = await Task.create({
+        title,
+        userId
+    });
+
+    if (!newTask) {
+        throw new Error('Failed to create task');
+    }
+
+    return newTask.title;
+};
+
+export const getUserTasks = async (userId: string) => {
+    const tasks = await Task.find({
+        userId
+    });
+
+    const output = tasks.map(task => {
+        delete task.__v;
+        return task
+    });
+    
+    return output;
 };

@@ -9,7 +9,7 @@ const taskSchema = new Schema({
     type: { type: String, enum: ['STORY', 'TASK'], default: 'STORY', required: true },
     points: { type: Number, required: false },
     status: { type: String, enum: ['TODO', 'IN_PROGRESS', 'DONE'], default: 'TODO', required: true },
-    user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+    userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
 });
 
 const Task = model('Task', taskSchema);

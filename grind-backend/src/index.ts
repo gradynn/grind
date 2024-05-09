@@ -9,6 +9,7 @@ import cors from 'cors';
 
 import indexRouter from './routes/index.route';
 import userRouter from './routes/user.route';
+import taskRouter from './routes/task.route';
 import logger from './utils/logger';
 import logRequest from './middleware/logRequest.middleware';
 
@@ -44,6 +45,7 @@ app.use(cors());
 
 app.use('/', indexRouter);
 app.use('/user', userRouter);
+app.use('/task', taskRouter);
 
 // configure HTTPS server
 const options = {

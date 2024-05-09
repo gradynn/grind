@@ -17,17 +17,17 @@ const authenticateToken = (req: Request, res: Response, next: NextFunction) => {
     const token = authHeader && authHeader.split(' ')[1];
 
     if (!token) {
-        return res.sendStatus(401).send('Access token is missing');
+        return res.status(401).send('Access token is missing');
     }
 
     jwt.verify(token, process.env.JWT_SECRET || '', (err, decoded) => {
         if (err) {
-            return res.sendStatus(403).send('Invalid token');
+            return res.status(403).send('Invalid token');
         }
 
         const payload = decoded as CustomJwtPayload;
         if (!payload.userId) {
-            return res.sendStatus(403).send('Invalid token');
+            return res.status(403).send('Invalid token');
         }
 
         req.body.userId = payload.userId;

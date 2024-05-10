@@ -1,5 +1,6 @@
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
+import logger from '../utils/logger';
 
 interface CustomJwtPayload extends JwtPayload {
     userId: string;
@@ -17,11 +18,13 @@ const authenticateToken = (req: Request, res: Response, next: NextFunction) => {
     const token = authHeader && authHeader.split(' ')[1];
 
     if (!token) {
+        logger.warn('Request made with no access token');
         return res.status(401).send('Access token is missing');
     }
 
     jwt.verify(token, process.env.JWT_SECRET || '', (err, decoded) => {
         if (err) {
+            logger.warn(`Failed to verify token: ${err.message}`);
             return res.status(403).send('Invalid token');
         }
 
@@ -30,6 +33,7 @@ const authenticateToken = (req: Request, res: Response, next: NextFunction) => {
             return res.status(403).send('Invalid token');
         }
 
+        // Add the userId to the request body for later use
         req.body.userId = payload.userId;
         next();
     });

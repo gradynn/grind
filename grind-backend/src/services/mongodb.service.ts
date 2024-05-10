@@ -77,6 +77,12 @@ export const getUserData = async (userId: string) => {
     };
 };
 
+/**
+ * @summary Create a new task for a user
+ * @param userId {string} - User ID
+ * @param title {string} - Task title
+ * @returns 
+ */
 export const createTask = async (userId: string, title: string): Promise<string> => {
     const newTask = await Task.create({
         title,
@@ -84,21 +90,72 @@ export const createTask = async (userId: string, title: string): Promise<string>
     });
 
     if (!newTask) {
+        logger.error('Failed to create task in MongoDB');
         throw new Error('Failed to create task');
     }
+    logger.info('Task created successfully');
 
     return newTask.title;
 };
 
+/**
+ * @summary Get all tasks for a user
+ * @param userId {string} - User ID
+ * @returns {Object[]} - Array of tasks { id, title, description, dueDate, type, points, status, userId }
+ */
 export const getUserTasks = async (userId: string) => {
     const tasks = await Task.find({
         userId
     });
 
-    const output = tasks.map(task => {
-        delete task.__v;
-        return task
+    if (!tasks) {
+        throw new Error('Failed to get tasks');
+    }
+
+    const filtered = tasks.map(task => {
+        return {
+            id: task._id,
+            title: task.title,
+            description: task?.description || '',
+            dueDate: task?.dueDate || '',
+            type: task.type,
+            points: task?.points || -1,
+            status: task.status,
+            userId: task.userId
+        }
     });
     
-    return output;
+    return filtered;
+};
+
+export const upsertTaskUpdate = async (taskId: string, userId: any, update: any) => {
+    const task = await Task.findOne({ _id: taskId, userId });
+
+    if (!task) {
+        throw new Error('Task not found or does not belong to user');
+    }
+    
+    const updatedTask = await Task.findByIdAndUpdate(taskId, update, { upsert: true, new: true });
+    
+    if (!updatedTask) {
+        throw new Error('Failed to update task');
+    }
+    
+    return updatedTask;
+};
+
+export const deleteTask = async (taskId: string, userId: string) => {
+    const task = await Task.findOne({ _id: taskId, userId });
+
+    if (!task) {
+        throw new Error('Task not found or does not belong to user');
+    }
+    
+    const deletedTask = await Task.findByIdAndDelete(taskId);
+    
+    if (!deletedTask) {
+        throw new Error('Failed to delete task');
+    }
+    
+    return deletedTask;
 };

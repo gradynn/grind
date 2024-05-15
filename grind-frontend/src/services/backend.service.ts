@@ -1,6 +1,6 @@
 import LoginUserRequest from "@src/models/loginUserRequest";
 import RegisterUserRequest from "@src/models/registerUserRequest";
-import UserData from "@src/models/userData";
+import { UserData } from "@src/models/userData";
 
 const serverUrl = import.meta.env.VITE_SERVER_URL;
 
@@ -50,7 +50,6 @@ export const loginUser = async (userData: LoginUserRequest): Promise<string | un
 
 export const getUserData = async (token: string): Promise<UserData> => {
 	try {
-		console.log('invoked with token:', token);
 		const response = await fetch(`${serverUrl}/user/user-data`, {
 			headers: {
 				'Authorization': `Bearer ${token}`,
@@ -58,14 +57,15 @@ export const getUserData = async (token: string): Promise<UserData> => {
 		});
 
 		const data = await response.json();
-		console.log(data);
+
 		return {
 			firstName: data.data.user.firstName,
 			lastName: data.data.user.lastName,
 			email: data.data.user.email,
-		};
+			tasks: data.data.user.tasks,
+		} as UserData;
 	} catch (error) {
 		throw new Error('An error occurred while fetching profile data');
-		return { firstName: '', lastName: '', email: '' };
+		return { firstName: '', lastName: '', email: '', tasks: []};
 	}
 };

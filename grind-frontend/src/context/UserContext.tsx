@@ -1,6 +1,6 @@
 import React, { createContext, useState, ReactNode, } from 'react';
 
-import UserData from '@src/models/userData';
+import { UserData } from '@src/models/userData';
 
 export const UserContext = createContext<{
 	userData: UserData | null;

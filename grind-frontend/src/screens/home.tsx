@@ -4,6 +4,7 @@ import { UserContext } from "@src/context/UserContext";
 import NavBar from "@src/components/menuBar";
 import { getUserData } from "@src/services/backend.service";
 import { useAuth } from "@src/utils/useAuth";
+import HomeDashboard from "@src/components/homeDashboard";
 
 const Home = () => {
     const { token } = useAuth();
@@ -25,6 +26,7 @@ const Home = () => {
     return (
         <div className="h-screen">
             <NavBar />
+            <HomeDashboard />
         </div>
     )
 }

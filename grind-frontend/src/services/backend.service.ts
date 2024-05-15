@@ -51,6 +51,7 @@ export const loginUser = async (userData: LoginUserRequest): Promise<string | un
 export const getUserData = async (token: string): Promise<UserData> => {
 	try {
 		const response = await fetch(`${serverUrl}/user/user-data`, {
+			method: 'GET',
 			headers: {
 				'Authorization': `Bearer ${token}`,
 			},
@@ -69,3 +70,20 @@ export const getUserData = async (token: string): Promise<UserData> => {
 		return { firstName: '', lastName: '', email: '', tasks: []};
 	}
 };
+
+export const addTask = async (token: string, title: string) => {
+	try {
+		const response = await fetch(`${serverUrl}/task/create`, {
+			method: 'POST',
+			headers: {
+				'Authorization': `Bearer ${token}`,
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({ title }),
+		});
+		console.log(response);
+	} catch (error) {
+		throw new Error('An error occurred while adding task');
+		return;
+	}
+}

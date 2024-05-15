@@ -20,9 +20,8 @@ const taskRouter = Router();
  * @return {object} 200 - Task created successfully
  * @return {object} 500 - Internal server error
  */
-taskRouter.post('/create', authenticateToken, schemaValidator(taskCreationSchema), async (req: Request, res: Response, next: NextFunction) => {
+taskRouter.post('/create', authenticateToken, async (req: Request, res: Response, next: NextFunction) => {
     const { userId } = req.body;
-
     try {
         const newTaskId = await createTask(userId, req.body.title);
         logger.info(`Task created successfully with ID: ${newTaskId}`);

@@ -4,18 +4,19 @@ export default {
     './src/**/*.{js,jsx,ts,tsx}',
   ],
   theme: {
-    extend: {},
-    colors: {
-      'primary': '#007FFF',
-      'secondary': '#254F79',
-      'accent': '#3C82C8',
-      'error': '#CC0000',
-      'text': '#FFFFFF',
-      'text-2': '#B3B3B3',
-      'background': '#121212',
-      'background-2': '#181818',
-      'input': '#2B2B2B',
-    }
+    extend: {
+      colors: {
+        'primary': '#007FFF',
+        'secondary': '#254F79',
+        'accent': '#3C82C8',
+        'error': '#CC0000',
+        'text': '#FFFFFF',
+        'text-2': '#B3B3B3',
+        'background': '#121212',
+        'background-2': '#181818',
+        'input': '#2B2B2B',
+      }
+    },
   },
   plugins: [],
 }

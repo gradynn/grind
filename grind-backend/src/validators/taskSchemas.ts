@@ -6,11 +6,11 @@ export const taskCreationSchema = z.object({
 
 export const taskUpdateSchema = z.object({
     update: z.object({
-        title: z.string().min(2).max(50).optional(),
-        description: z.string().min(2).max(200).optional(),
+        title: z.string().min(2).max(50),
+        description: z.string().max(200),
         dueDate: z.date().optional(),
-        type: z.enum(['STORY', 'TASK']).optional(),
-        points: z.number().int().optional(),
-        status: z.enum(['TODO', 'IN_PROGRESS', 'DONE']).optional(),
+        type: z.enum(['STORY', 'TASK']),
+        points: z.number().int(),
+        status: z.enum(['TODO', 'IN_PROGRESS', 'DONE']),
     }),
 });

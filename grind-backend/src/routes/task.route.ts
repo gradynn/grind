@@ -46,6 +46,7 @@ taskRouter.post('/create', authenticateToken, async (req: Request, res: Response
  */
 taskRouter.patch('/update/:taskId', authenticateToken, schemaValidator(taskUpdateSchema), async (req: Request, res: Response, next: NextFunction) => {
     const { userId, update } = req.body;
+    console.log(update);
     const taskId = req.params.taskId;
 
     try {
@@ -58,7 +59,7 @@ taskRouter.patch('/update/:taskId', authenticateToken, schemaValidator(taskUpdat
             message: 'Internal server error',
         });
     }
-}, success)
+}, success);
 
 /**
  * DELETE /task/delete/:taskId

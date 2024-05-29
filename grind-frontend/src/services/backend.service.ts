@@ -1,6 +1,6 @@
 import LoginUserRequest from "@src/models/loginUserRequest";
 import RegisterUserRequest from "@src/models/registerUserRequest";
-import { UserData } from "@src/models/userData";
+import { Task, UserData } from "@src/models/userData";
 
 const serverUrl = import.meta.env.VITE_SERVER_URL;
 
@@ -85,5 +85,26 @@ export const addTask = async (token: string, title: string) => {
 	} catch (error) {
 		throw new Error('An error occurred while adding task');
 		return;
+	}
+}
+
+export const updateTask = async (token: string, updateTask: Task) => {
+	try {
+		const response = await fetch(`${serverUrl}/task/update/${updateTask.id}`, {
+			method: 'PATCH',
+			headers: {
+				'Authorization': `Bearer ${token}`,
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({ 
+				update: { 
+					...updateTask,
+					
+				}
+			}),
+		});
+		console.log(response);
+	} catch (error) {
+		throw new Error('An error occured while updating task');
 	}
 }

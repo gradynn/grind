@@ -14,7 +14,6 @@ interface CustomJwtPayload extends JwtPayload {
  * @returns 
  */
 const authenticateToken = (req: Request, res: Response, next: NextFunction) => {
-    console.log(req);
     const authHeader = req.headers.authorization;
     const token = authHeader && authHeader.split(' ')[1];
 

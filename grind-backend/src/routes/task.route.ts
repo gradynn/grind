@@ -42,12 +42,13 @@ taskRouter.post('/create', authenticateToken, async (req: Request, res: Response
  * @param {string} request.params.taskId - Task ID
  * @param {string} request.body.update - Object containing fields to update
  * @return {object} 200 - Task updated successfully
+ * @return {object} 400 - Invalid request schema
  * @return {object} 500 - Internal server error
  */
 taskRouter.patch('/update/:taskId', authenticateToken, schemaValidator(taskUpdateSchema), async (req: Request, res: Response, next: NextFunction) => {
     const { userId, update } = req.body;
-    console.log(update);
     const taskId = req.params.taskId;
+    logger.info(`Attempting to update task with id: ${taskId}`)
 
     try {
         const updatedTask = await upsertTaskUpdate(taskId, userId, update);

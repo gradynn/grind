@@ -98,8 +98,7 @@ export const updateTask = async (token: string, updateTask: Task) => {
 			},
 			body: JSON.stringify({ 
 				update: { 
-					...updateTask,
-					
+					...updateTask,	
 				}
 			}),
 		});

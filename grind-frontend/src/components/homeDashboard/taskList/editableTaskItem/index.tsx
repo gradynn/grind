@@ -36,9 +36,9 @@ const EditableTaskItem = ({ task, setEditing }: TaskItemProps) => {
     const [statusWidth, setStatusWidth] = useState(0);
     const statusRef = useRef<HTMLSpanElement>(null);
 
-    const handleSaveClick = () => {
+    const handleSaveClick = async () => {
         setEditing(null);
-        //updateTask(token || '', taskUpdate);
+        await updateTask(token || '', taskUpdate);
         window.location.reload();
     };
 

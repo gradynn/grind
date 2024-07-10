@@ -1,7 +1,10 @@
 import { IoPencil } from "react-icons/io5";
+import { TiDeleteOutline } from "react-icons/ti";
 
 import { Task } from '@src/models/userData';
 import { useState } from "react";
+import { deleteTask } from "@src/services/backend.service";
+import { useAuth } from "@src/utils/useAuth";
 
 const TypeMarker = ({ type }: { type: string }) => {
     if (type == "STORY") {
@@ -37,10 +40,27 @@ interface TaskItemProps {
 }
 
 const TaskItem = ({ task, setEditing }: TaskItemProps) => {
+    const { token } = useAuth();
+
     const [highlightInteractionItems, setHighlightInteractionItems] = useState(false);
 
     const handleEditClick = () => {
         setEditing(task.id);
+    }
+
+    const handleDeleteClick = async () => {
+        const userChoice = window.confirm("Are you sure you want to delete this task? This can't be undone.");
+        
+        if (!userChoice) {
+            return
+        }
+
+        try {
+            await deleteTask(token || '', task.id);
+            window.location.reload();
+        } catch (e) {
+            alert('Task could not be deleted at this time. Please try again later.');
+        }
     }
 
     return (
@@ -53,7 +73,10 @@ const TaskItem = ({ task, setEditing }: TaskItemProps) => {
                     <p className='text-xl'>{task.title}</p>
                     <StatusMarker status={task.status} />
                 </div>
-                <IoPencil onClick={handleEditClick} className={`text-2xl ${highlightInteractionItems ? 'text-gray-300' : 'text-gray-800'} cursor-pointer`}/>
+                <div className="flex flex-row items-center">
+                    <IoPencil onClick={handleEditClick} className={`text-2xl ${highlightInteractionItems ? 'text-gray-300' : 'text-gray-900'} cursor-pointer`}/>
+                    <TiDeleteOutline onClick={handleDeleteClick} className={`text-3xl ${highlightInteractionItems ? 'text-error' : 'text-gray-900'} cursor-pointer ml-1`}/>
+                </div>
             </div>
             <div className={'my-1 ' + (task.description ? 'text-text' : 'text-gray-500')}>
                 {task.description ? task.description : 'Description...'}

@@ -1,4 +1,5 @@
 import { IoPencil } from "react-icons/io5";
+import { TiDeleteOutline } from "react-icons/ti";
 
 import { Task } from '@src/models/userData';
 import { useState } from "react";
@@ -43,6 +44,10 @@ const TaskItem = ({ task, setEditing }: TaskItemProps) => {
         setEditing(task.id);
     }
 
+    const handleDeleteClick = () => {
+        // Delete
+    }
+
     return (
         <div className={`bg-background text-text rounded-xl p-3 my-3`}
             onMouseEnter={() => setHighlightInteractionItems(!highlightInteractionItems)} 
@@ -53,7 +58,10 @@ const TaskItem = ({ task, setEditing }: TaskItemProps) => {
                     <p className='text-xl'>{task.title}</p>
                     <StatusMarker status={task.status} />
                 </div>
-                <IoPencil onClick={handleEditClick} className={`text-2xl ${highlightInteractionItems ? 'text-gray-300' : 'text-gray-800'} cursor-pointer`}/>
+                <div className="flex flex-row items-center">
+                    <IoPencil onClick={handleEditClick} className={`text-2xl ${highlightInteractionItems ? 'text-gray-300' : 'text-gray-800'} cursor-pointer`}/>
+                    <TiDeleteOutline onClick={handleDeleteClick} className={`text-3xl ${highlightInteractionItems ? 'text-error' : 'text-gray-800'} cursor-pointer ml-1`}/>
+                </div>
             </div>
             <div className={'my-1 ' + (task.description ? 'text-text' : 'text-gray-500')}>
                 {task.description ? task.description : 'Description...'}

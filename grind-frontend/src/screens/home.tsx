@@ -1,7 +1,7 @@
 import { useEffect, useContext } from "react";
 
 import { UserContext } from "@src/context/UserContext";
-import NavBar from "@src/components/menuBar";
+import NavBar from "@src/components/navBar";
 import { getUserData } from "@src/services/backend.service";
 import { useAuth } from "@src/utils/useAuth";
 import HomeDashboard from "@src/components/homeDashboard";
@@ -24,7 +24,7 @@ const Home = () => {
     }, [ token, setUserData ])
 
     return (
-        <div className="h-screen">
+        <div className="flex flex-col h-screen">
             <NavBar />
             <HomeDashboard />
         </div>

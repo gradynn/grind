@@ -11,9 +11,9 @@ const TaskList = () => {
     const [editing, setEditing] = useState<string | null>(null);
 
     return (
-        <div className="h-[95%] bg-background-2 w-full lg:w-1/3 rounded-3xl p-5">
+        <div className="bg-background-2 w-full lg:w-1/3 rounded-2xl p-2 m-2">
             <TaskAdd />
-           <div className="flex flex-col w-full drop-shadow-xl my-2"></div>
+           <div className="flex flex-col w-full drop-shadow-xl"></div>
             {userData ? userData.tasks.map((task: Task) => {
                 if (task.id == editing) {
                     return (

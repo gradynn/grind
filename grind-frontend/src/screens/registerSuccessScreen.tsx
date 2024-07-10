@@ -1,4 +1,4 @@
-import NavBar from "@src/components/menuBar";
+import NavBar from "@src/components/navBar";
 import RegisterSuccess from "@src/components/registerSuccess";
 
 const RegisterSuccessScreen = () => {

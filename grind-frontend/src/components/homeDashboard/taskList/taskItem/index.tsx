@@ -1,6 +1,7 @@
 import { IoPencil } from "react-icons/io5";
 
 import { Task } from '@src/models/userData';
+import { useState } from "react";
 
 const TypeMarker = ({ type }: { type: string }) => {
     if (type == "STORY") {
@@ -36,18 +37,23 @@ interface TaskItemProps {
 }
 
 const TaskItem = ({ task, setEditing }: TaskItemProps) => {
+    const [highlightInteractionItems, setHighlightInteractionItems] = useState(false);
+
     const handleEditClick = () => {
         setEditing(task.id);
     }
 
     return (
-        <div className='bg-background text-text rounded-xl shadow p-3 my-3'>
+        <div className={`bg-background text-text rounded-xl p-3 my-3`}
+            onMouseEnter={() => setHighlightInteractionItems(!highlightInteractionItems)} 
+            onMouseLeave={() => setHighlightInteractionItems(!highlightInteractionItems)}
+        >
             <div className='flex w-full items-center justify-between'>
                 <div className="flex gap-3">
                     <p className='text-xl'>{task.title}</p>
                     <StatusMarker status={task.status} />
                 </div>
-                <IoPencil onClick={handleEditClick} className="text-2xl text-gray-500 cursor-pointer"/>
+                <IoPencil onClick={handleEditClick} className={`text-2xl ${highlightInteractionItems ? 'text-gray-300' : 'text-gray-800'} cursor-pointer`}/>
             </div>
             <div className={'my-1 ' + (task.description ? 'text-text' : 'text-gray-500')}>
                 {task.description ? task.description : 'Description...'}

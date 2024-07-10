@@ -1,4 +1,4 @@
-import NavBar from "@src/components/menuBar";
+import NavBar from "@src/components/navBar";
 import LoginForm from "@src/components/loginForm";
 
 const LoginScreen = () => {

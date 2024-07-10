@@ -73,7 +73,7 @@ export const getUserData = async (token: string): Promise<UserData> => {
 
 export const addTask = async (token: string, title: string) => {
 	try {
-		const response = await fetch(`${serverUrl}/task/create`, {
+		await fetch(`${serverUrl}/task/create`, {
 			method: 'POST',
 			headers: {
 				'Authorization': `Bearer ${token}`,
@@ -81,7 +81,6 @@ export const addTask = async (token: string, title: string) => {
 			},
 			body: JSON.stringify({ title }),
 		});
-		console.log(response);
 	} catch (error) {
 		throw new Error('An error occurred while adding task');
 		return;
@@ -90,7 +89,7 @@ export const addTask = async (token: string, title: string) => {
 
 export const updateTask = async (token: string, updateTask: Task) => {
 	try {
-		const response = await fetch(`${serverUrl}/task/update/${updateTask.id}`, {
+		await fetch(`${serverUrl}/task/update/${updateTask.id}`, {
 			method: 'PATCH',
 			headers: {
 				'Authorization': `Bearer ${token}`,
@@ -102,8 +101,21 @@ export const updateTask = async (token: string, updateTask: Task) => {
 				}
 			}),
 		});
-		console.log(response);
 	} catch (error) {
 		throw new Error('An error occured while updating task');
+	}
+}
+
+export const deleteTask = async (token: string, taskId: string) => {
+	try {
+		await fetch(`${serverUrl}/task/delete/${taskId}`, {
+			method: 'DELETE',
+			headers: {
+				'Authorization': `Bearer ${token}`,
+				'Content-Type': 'application/json',
+			}
+		});
+	} catch (error) {
+		throw new Error('An error occured when trying to delete this task.')
 	}
 }

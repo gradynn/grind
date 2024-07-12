@@ -36,23 +36,23 @@ export const registerUser = async (firstName: string, lastName: string, email: s
  * @returns {string} - JWT token
  */
 export const loginUser = async (email: string, password: string): Promise<string> => {
-    logger.info(`Logging in user with email: ${email}`);
+    logger.info(`Logging in user with email: ${email}.`);
     const user = await User.findOne({ email });
 
     if (!user) {
-        logger.warn('User not found');
+        logger.info(`User with email ${email} not found.`);
         throw new Error('User not found');
     }
 
     const passwordMatch = await bcrypt.compare(password, user.password);
 
     if (!passwordMatch) {
-        logger.warn('Invalid password');
+        logger.info('User entered incorrect password.');
         throw new Error('Invalid password');
     }
 
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET || '', { expiresIn: '1h' });
-    logger.info('User verified successfully, returning token');
+    logger.info('User verified successfully, returning token.');
 
     return token
 };

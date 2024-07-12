@@ -7,6 +7,7 @@ import schemaValidator from "../middleware/schemaValidator.middleware";
 import { registerUser, loginUser, getUserData, getUserTasks } from "../services/mongodb.service";
 import authenticateToken from "../middleware/authenticateToken.middleware";
 import userSignInSchema from "../validators/userSignInSchema";
+import logger from "../utils/logger";
 
 const userRouter = Router();
 
@@ -37,10 +38,12 @@ userRouter.post('/register', limiter, schemaValidator(userRegistrationSchema), a
         next();
     } catch (error: any) {
         if (error.code === 11000) {
+            logger.info('User with email already exists. Returning error message.')
             res.status(409).json({
                 message: 'User with that email already exists',
             });
         } else {
+            logger.info('Unknown issue occured. Returning error message to user.')
             res.status(500).json({
                 message: 'Internal server error',
             });
@@ -62,6 +65,7 @@ userRouter.post('/register', limiter, schemaValidator(userRegistrationSchema), a
 userRouter.post('/login', limiter, schemaValidator(userSignInSchema), async (req: Request, res: Response, next: NextFunction) => {
     const { email, password } = req.body;
     try {
+        logger.info('Attempting user login...')
         const token = await loginUser(email, password);
         res.locals.data = { token };
         next();
@@ -105,6 +109,8 @@ userRouter.get('/user-data', authenticateToken, async (req: Request, res: Respon
         };
 
         res.locals.data = { user: payload };
+
+        logger.info('User data successfully fetched.')
         next();
     } catch (error: any) {
         res.status(500).json({

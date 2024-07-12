@@ -8,9 +8,18 @@ import EditableTaskItem from "./editableTaskItem";
 import Dropdown from "@src/components/dropdown";
 
 const statuses = [
-    "TODO",
-    "IN_PROGRESS",
-    "DONE"
+    {
+        val: "TODO",
+        label: "TODO"
+    },
+    {
+        val: "IN_PROGRESS",
+        label: "IN PROGRESS"
+    },
+    {
+        val: "DONE",
+        label: "DONE"
+    }
 ]
 
 const TaskList = () => {
@@ -23,7 +32,7 @@ const TaskList = () => {
         <div className="bg-background-2 w-full lg:w-1/3 rounded-2xl p-2 m-2 h-full flex flex-col">
             <TaskAdd />
             <div className="w-full overflow-x-scroll">
-                <Dropdown options={statuses} callback={setStatusFilter}/>
+                <Dropdown title='STATUS' options={statuses} callback={setStatusFilter} type='filter'/>
             </div>
            <div className="flex flex-col w-full overflow-y-auto mt-2" style={{ flexGrow: 1 }}>
                 {userData ? userData.tasks.filter((task: Task) => {

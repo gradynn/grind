@@ -4,10 +4,7 @@ import jwt from 'jsonwebtoken';
 import User from "../models/User.model";
 import Task from '../models/Task.model';
 import logger from '../utils/logger';
-
-interface MongoError extends Error {
-    code?: number;
-};
+import { TaskUpdate } from '../entities/task.entity';
 
 /**
  * @summary Register a new user in the database
@@ -26,6 +23,7 @@ export const registerUser = async (firstName: string, lastName: string, email: s
         email,
         password: hashedPassword,
     });
+    
     return newUser;
 };
 
@@ -100,7 +98,7 @@ export const createTask = async (userId: string, title: string): Promise<string>
 
 /**
  * @summary Get all tasks for a user
- * @param userId {string} - User ID
+ * @param {string} userId User ID
  * @returns {Object[]} - Array of tasks { id, title, description, dueDate, type, points, status, userId }
  */
 export const getUserTasks = async (userId: string) => {
@@ -128,7 +126,14 @@ export const getUserTasks = async (userId: string) => {
     return filtered;
 };
 
-export const upsertTaskUpdate = async (taskId: string, userId: any, update: any) => {
+/**
+ * @summary Updates a task objects values in DB
+ * @param {string} taskId ID of task to update
+ * @param {string} userId ID of user who owns task, used for verification purposes
+ * @param {Object} update Task Object containing values to persist in DB
+ * @returns {Object} object representing the updated task
+ */
+export const updateTask = async (taskId: string, userId: string, update: TaskUpdate) => {
     const task = await Task.findOne({ _id: taskId, userId });
 
     if (!task) {
@@ -144,6 +149,12 @@ export const upsertTaskUpdate = async (taskId: string, userId: any, update: any)
     return updatedTask;
 };
 
+/**
+ * @summary Deletes a task from the DB
+ * @param {string} taskId ID of the task to be deleted
+ * @param {string} userId ID of user who owns the task
+ * @returns {Object} The deleted task object
+ */
 export const deleteTask = async (taskId: string, userId: string) => {
     const task = await Task.findOne({ _id: taskId, userId });
 

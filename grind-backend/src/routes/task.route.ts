@@ -1,11 +1,10 @@
 import { NextFunction, Request, Response, Router } from 'express';
-import rateLimit from 'express-rate-limit';
 
 import success from '../middleware/success.middleware';
 import schemaValidator from '../middleware/schemaValidator.middleware';
-import { taskCreationSchema, taskUpdateSchema } from '../validators/taskSchemas';
+import { taskUpdateSchema } from '../validators/taskSchemas';
 import authenticateToken from '../middleware/authenticateToken.middleware';
-import { createTask, deleteTask, upsertTaskUpdate } from '../services/mongodb.service';
+import { createTask, deleteTask, updateTask } from '../services/mongodb.service';
 import logger from '../utils/logger';
 
 const taskRouter = Router();
@@ -51,7 +50,7 @@ taskRouter.patch('/update/:taskId', authenticateToken, schemaValidator(taskUpdat
     logger.info(`Attempting to update task with id: ${taskId}`)
 
     try {
-        const updatedTask = await upsertTaskUpdate(taskId, userId, update);
+        const updatedTask = await updateTask(taskId, userId, update);
         logger.info(`Task updated successfully: ${updatedTask}`);
         next();
     } catch (error: any) {
